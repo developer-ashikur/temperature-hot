@@ -22,23 +22,43 @@
     <div class="container">
         <form class="col-md-6 m-auto py-5">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <input type="text" class="form-control" placeholder="Enter a location for Weather ..." id="city-name">
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-danger">Search</button>
+                    <button type="button" class="btn btn-danger" onclick="getWeatherUpdate()">Search</button>
                 </div>
             </div>
         </form>
         <div class="weather-status text-white text-center">
-            <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
-            <h1>Dhaka</h1>
-            <h3><span>38.06</span>&deg;C</h3>
-            <h1 class="lead">Clouds</h1>
+            <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="" id="display-image">
+            <h1 id="display-city">Dhaka</h1>
+            <h3><span id="display-temp">38.06</span>&deg;C</h3>
+            <h1 class="lead" id="display-description">Clouds</h1>
         </div>
     </div>
 
 
     <script>
-        
+        const key = 'd0467861e1ff9dcbcfa7a1ab49970287';
+        const city = document.getElementById('city-name');
+        const displayCity = document.getElementById('display-city');
+        const displayTemp = document.getElementById('display-temp');
+        const displayDescription = document.getElementById('display-description');
+        const displayImage = document.getElementById('display-image');
+       
+        function getWeatherUpdate (){
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=${key}`)
+            .then(res => res.json())
+            .then(data => {
+                const cityName = data.name;
+                displayCity.innerText = cityName;
+                const temp = data.main.temp;
+                displayTemp.innerText = temp;
+                const description = data.weather[0].description;
+                displayDescription.innerText = description;
+                const imageSrc = data.weather[0].icon;
+                displayImage.setAttribute('src', `https://openweathermap.org/img/wn/${imageSrc}@2x.png`);
+            })
+        }
     </script>
 </body>
 
